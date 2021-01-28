@@ -6,12 +6,12 @@ import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:game_base/componentes/Spaceship.dart';
-import 'package:game_base/componentes/button_left.dart';
-import 'package:game_base/componentes/button_rigth.dart';
+import 'package:matando_zumbi/componentes/Spaceship.dart';
+import 'package:matando_zumbi/componentes/button_left.dart';
+import 'package:matando_zumbi/componentes/button_rigth.dart';
+import 'package:matando_zumbi/componentes/Background.dart';
 import 'componentes/Bullet.dart';
-import 'componentes/Dragon.dart';
-import 'componentes/Smyle.dart';
+import 'componentes/Zumbi.dart';
 import 'package:flame/gestures.dart';
 
 const DRAGON_SIZE = 40.0;
@@ -21,14 +21,15 @@ var game;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Flame.images.loadAll([
-    'smiley.png',
-    'dragon.png',
+    'zumbi.png',
     'spaceship.png',
     'play-button_rigth.png',
     'play-button_left.png',
     'bullet.png',
-    'explosion-1.png'
+    'explosion-1.png',
+    'cidadeZumbi.jpg'
   ]);
+
   Flame.audio.load('explosion.mp3');
   var dimensions = await Flame.util.initialDimensions();
 
@@ -37,16 +38,15 @@ void main() async {
   runApp(game.widget);
 }
 
-Smyle smyle;
-Dragon dragon;
+Zumbi zumbi;
 Spaceship spaceship;
 ButtonLeft buttonLeft;
 ButtonRigth buttonRigth;
+Background bg;
 
 bool isaAddNave = false;
 bool isAddButton = false;
-List<Dragon> dragonList;
-List<Smyle> smyleList;
+List<Zumbi> dragonList;
 var points = 0;
 
 class JogoBase extends BaseGame with TapDetector {
@@ -57,8 +57,9 @@ class JogoBase extends BaseGame with TapDetector {
     spaceship = new Spaceship(dimensions);
     buttonLeft = new ButtonLeft(dimensions);
     buttonRigth = new ButtonRigth(dimensions);
-    dragonList = <Dragon>[];
-    smyleList = <Smyle>[];
+    bg = new Background(this.dimensions);
+    dragonList = <Zumbi>[];
+    add(bg);
   }
 
   @override
@@ -77,17 +78,9 @@ class JogoBase extends BaseGame with TapDetector {
     creationTimer += t;
     if (creationTimer >= 0.5) {
       creationTimer = 0.0;
-      int escolha = random.nextInt(2);
-      print(escolha);
-      if (escolha > 0) {
-        smyle = new Smyle(dimensions);
-        smyleList.add(smyle);
-        add(smyle);
-      } else {
-        dragon = new Dragon(dimensions);
-        dragonList.add(dragon);
-        add(dragon);
-      }
+      zumbi = new Zumbi(dimensions);
+      dragonList.add(zumbi);
+      add(zumbi);
     }
 
     print('Placar: $points');
@@ -122,7 +115,7 @@ class JogoBase extends BaseGame with TapDetector {
   }
 
   void tapInput(Offset position) {
-    Bullet bullet = new Bullet(dragonList, smyleList, position);
+    Bullet bullet = new Bullet(dragonList, position);
     add(bullet);
   }
 }

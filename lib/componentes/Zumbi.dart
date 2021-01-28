@@ -7,12 +7,12 @@ import 'package:flutter/widgets.dart';
 const ComponentSize = 60.0;
 const SPEED = 150.0;
 
-class Dragon extends SpriteComponent {
+class Zumbi extends SpriteComponent {
   bool remove = false;
   Size dimensions;
   Random random = new Random();
 
-  Dragon(this.dimensions) : super.square(ComponentSize, 'dragon.png');
+  Zumbi(this.dimensions) : super.square(ComponentSize, 'zumbi.png');
 
   @override
   void update(double t) {
